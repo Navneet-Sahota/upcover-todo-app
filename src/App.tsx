@@ -2,6 +2,7 @@ import { Box, Divider, Stack, Typography } from "@mui/material";
 import AddTaskFAB from "./components/AddTaskFAB";
 import Header from "./components/Header";
 import TaskList from "./components/TaskList";
+import InlineTaskForm from "./components/InlineTaskForm";
 
 function App() {
   return (
@@ -16,6 +17,8 @@ function App() {
     >
       <Stack spacing={4}>
         <Header />
+
+        <InlineTaskForm />
 
         <Box>
           <Typography variant="h6" gutterBottom>
