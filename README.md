@@ -1,54 +1,72 @@
-# React + TypeScript + Vite
+# ✅ Todo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimal yet fully functional Todo app built with **React + TypeScript**, featuring drag-and-drop, responsive design, and local persistence. Built with a focus on clean code, modular structure, and smooth UX.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+### ✅ Task Management
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Create, edit, delete tasks
+- Mark tasks as complete/incomplete
+- Tasks move automatically between sections
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### ✅ UX Enhancements
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- Confirmation modal on delete
+- Prevents duplicate task names
+- Validates required fields
+- Smooth error handling with animated feedback
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### ✅ State & Persistence
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+- Global state managed via Zustand
+- LocalStorage sync on every change
+
+### ✅ Responsive UI
+
+- Mobile-first layout using MUI v6.4.2
+- Inline form on desktop, modal on mobile
+- Side-by-side task lists on desktop, stacked on mobile
+
+### ✅ Drag & Drop
+
+- Reorder tasks within each section
+- Built with `@hello-pangea/dnd` for smooth performance
+
+### ✅ Error Handling
+
+- Global `ErrorBoundary` to catch unexpected crashes
+
+---
+
+## 🧪 Tests (Coming Soon)
+
+Unit tests with:
+
+- `Jest` + `React Testing Library`
+- Task creation & validation
+- Zustand store mocking
+- Coverage for form behavior
+
+---
+
+## 🧱 Tech Stack
+
+- React + TypeScript
+- Material UI v6.4.2
+- Zustand for state management
+- Framer Motion for animation
+- React Hook Form + Yup for validation
+- `@hello-pangea/dnd` for drag & drop
+
+## ▶️ Getting Started
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Start the development server
+npm run dev
 ```
