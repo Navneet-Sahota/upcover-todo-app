@@ -1,41 +1,43 @@
+// TaskFormDialog.tsx
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
   Button,
   IconButton,
   useMediaQuery,
   useTheme,
-  Stack,
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
 import useTaskStore from "../store/taskStore";
+import TaskFormBody from "./TaskFormBody";
+import useTaskForm from "../hooks/useTaskForm";
 
-export default function TaskFormDialog({
-  open,
-  onClose,
-}: {
+interface Props {
   open: boolean;
   onClose: () => void;
-}) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+}
+
+export default function TaskFormDialog({ open, onClose }: Props) {
   const addTask = useTaskStore((s) => s.addTask);
-
-  const handleSubmit = () => {
-    if (!title.trim()) return;
-    addTask({ title: title.trim(), description, completed: false });
-    setTitle("");
-    setDescription("");
-    onClose();
-  };
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const {
+    control,
+    handleSubmit,
+    onSubmit,
+    titleRef,
+    descriptionRef,
+    errors,
+    duplicateError,
+  } = useTaskForm({
+    onSubmitCallback: (data) => addTask({ ...data, completed: false }),
+    onClose,
+    isFormOpen: open,
+  });
 
   return (
     <Dialog
@@ -60,36 +62,26 @@ export default function TaskFormDialog({
         </IconButton>
       </Box>
 
-      <DialogContent sx={{ px: 3 }}>
-        <Stack spacing={2} mt={1}>
-          <TextField
-            label="Title"
-            fullWidth
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            variant="outlined"
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent sx={{ px: 3 }}>
+          <TaskFormBody
+            control={control}
+            errors={errors}
+            titleRef={titleRef}
+            descriptionRef={descriptionRef}
+            duplicateError={duplicateError}
           />
-          <TextField
-            label="Description"
-            fullWidth
-            multiline
-            minRows={4}
-            maxRows={6}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            variant="outlined"
-          />
-        </Stack>
-      </DialogContent>
+        </DialogContent>
 
-      <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose} variant="text" color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} variant="contained" color="primary">
-          Add
-        </Button>
-      </DialogActions>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={onClose} variant="text">
+            Cancel
+          </Button>
+          <Button type="submit" variant="contained">
+            Add
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

@@ -3,17 +3,16 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
   Button,
   IconButton,
   useMediaQuery,
   useTheme,
-  Stack,
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState, useEffect } from "react";
+import TaskFormBody from "./TaskFormBody";
 import useTaskStore, { Task } from "../store/taskStore";
+import useTaskForm from "../hooks/useTaskForm";
 
 type Props = {
   open: boolean;
@@ -22,23 +21,25 @@ type Props = {
 };
 
 export default function EditTaskDialog({ open, onClose, task }: Props) {
-  const [title, setTitle] = useState(task.title);
-  const [description, setDescription] = useState(task.description || "");
   const updateTask = useTaskStore((s) => s.updateTask);
-
-  useEffect(() => {
-    setTitle(task.title);
-    setDescription(task.description || "");
-  }, [task]);
-
-  const handleSubmit = () => {
-    if (!title.trim()) return;
-    updateTask(task.id, { title: title.trim(), description });
-    onClose();
-  };
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const {
+    control,
+    handleSubmit,
+    onSubmit,
+    titleRef,
+    descriptionRef,
+    errors,
+    duplicateError,
+  } = useTaskForm({
+    onSubmitCallback: (data) => updateTask(task.id, data),
+    onClose,
+    initialValues: { title: task.title, description: task.description || "" },
+    taskIdToIgnore: task.id,
+    isFormOpen: open,
+  });
 
   return (
     <Dialog
@@ -63,36 +64,26 @@ export default function EditTaskDialog({ open, onClose, task }: Props) {
         </IconButton>
       </Box>
 
-      <DialogContent sx={{ px: 3 }}>
-        <Stack spacing={2} mt={1}>
-          <TextField
-            label="Title"
-            fullWidth
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            variant="outlined"
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent sx={{ px: 3 }}>
+          <TaskFormBody
+            control={control}
+            errors={errors}
+            titleRef={titleRef}
+            descriptionRef={descriptionRef}
+            duplicateError={duplicateError}
           />
-          <TextField
-            label="Description"
-            fullWidth
-            multiline
-            minRows={4}
-            maxRows={6}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            variant="outlined"
-          />
-        </Stack>
-      </DialogContent>
+        </DialogContent>
 
-      <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose} variant="text">
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} variant="contained">
-          Save
-        </Button>
-      </DialogActions>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button onClick={onClose} variant="text">
+            Cancel
+          </Button>
+          <Button type="submit" variant="contained">
+            Save
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }
