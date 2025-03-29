@@ -5,8 +5,8 @@ import { Control, FieldErrors } from "react-hook-form";
 import { Controller } from "react-hook-form";
 
 interface FieldValues {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
 }
 
 export default function TaskFormBody({

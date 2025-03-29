@@ -86,7 +86,7 @@ export default function TaskCard(props: TaskCardProps) {
                       setDeleteOpen(true);
                     }}
                   >
-                    <DeleteIcon fontSize="small" />
+                    <DeleteIcon fontSize="small" data-testid="delete-icon" />
                   </IconButton>
                 </Stack>
               </Stack>

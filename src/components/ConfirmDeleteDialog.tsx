@@ -36,7 +36,12 @@ export default function ConfirmDeleteDialog({
         <Button onClick={onClose} variant="text">
           Cancel
         </Button>
-        <Button onClick={onConfirm} variant="contained" color="error">
+        <Button
+          onClick={onConfirm}
+          variant="contained"
+          color="error"
+          data-testid="confirm-delete"
+        >
           Delete
         </Button>
       </DialogActions>
