@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import useTaskStore from "../store/taskStore";
+import { FieldData } from "../components/TaskFormBody";
 
-const schema = yup.object().shape({
-  title: yup.string().trim().required("Title is required"),
-  description: yup.string().trim().required("Description is required"),
+const schema = z.object({
+  title: z.string().trim().min(1, "Title is required"),
+  description: z.string().trim().min(1, "Description is required"),
 });
+
+type FormSchema = z.infer<typeof schema>;
 
 type Params = {
   onSubmitCallback: (data: { title: string; description: string }) => void;
@@ -17,7 +20,7 @@ type Params = {
   isFormOpen: boolean;
 };
 
-const INITIAL_VALUES = { title: "", description: "" };
+const INITIAL_VALUES: FieldData = { title: "", description: "" };
 
 export default function useTaskForm({
   onSubmitCallback,
@@ -41,8 +44,8 @@ export default function useTaskForm({
     formState: { errors },
     watch,
     trigger,
-  } = useForm({
-    resolver: yupResolver(schema),
+  } = useForm<FormSchema>({
+    resolver: zodResolver(schema),
     defaultValues: initialValues,
     mode: "onSubmit",
   });
@@ -54,13 +57,7 @@ export default function useTaskForm({
     else if (errors.description) descriptionRef.current?.focus();
   };
 
-  const onSubmit = async ({
-    title,
-    description,
-  }: {
-    title: string;
-    description: string;
-  }) => {
+  const onSubmit: SubmitHandler<FieldData> = async ({ title, description }) => {
     const valid = await trigger();
     if (!valid) {
       focusFirstError();

@@ -3,10 +3,11 @@ import AnimatedTextField from "./AnimatedTextField";
 import DuplicateErrorAlert from "./DuplicateErrorAlert";
 import { Control, FieldErrors } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import { RefObject } from "react";
 
-interface FieldValues {
-  title?: string;
-  description?: string;
+export interface FieldData {
+  title: string;
+  description: string;
 }
 
 export default function TaskFormBody({
@@ -16,18 +17,17 @@ export default function TaskFormBody({
   descriptionRef,
   duplicateError,
 }: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  control: Control<FieldValues, any, FieldValues>;
-  errors: FieldErrors<FieldValues>;
-  titleRef: React.RefObject<HTMLInputElement | null>;
-  descriptionRef: React.RefObject<HTMLInputElement | null>;
+  control: Control<FieldData>;
+  errors: FieldErrors<FieldData>;
+  titleRef: RefObject<HTMLInputElement | null>;
+  descriptionRef: RefObject<HTMLInputElement | null>;
   duplicateError?: string;
 }) {
   return (
     <Stack spacing={2} mt={1}>
       <Controller
         name="title"
-        control={control}
+        control={control as Control<FieldData>}
         render={({ field }) => (
           <AnimatedTextField
             label="Title"
@@ -44,7 +44,7 @@ export default function TaskFormBody({
 
       <Controller
         name="description"
-        control={control}
+        control={control as Control<FieldData>}
         render={({ field }) => (
           <AnimatedTextField
             label="Description"

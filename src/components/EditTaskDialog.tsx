@@ -10,10 +10,11 @@ import {
   Box,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import TaskFormBody from "./TaskFormBody";
+import TaskFormBody, { FieldData } from "./TaskFormBody";
 import useTaskStore, { Task } from "../store/taskStore";
 import useTaskForm from "../hooks/useTaskForm";
 import { motion } from "framer-motion";
+import { Control } from "react-hook-form";
 
 type Props = {
   open: boolean;
@@ -74,7 +75,7 @@ export default function EditTaskDialog({ open, onClose, task }: Props) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogContent sx={{ px: 3 }}>
             <TaskFormBody
-              control={control}
+              control={control as Control<FieldData>}
               errors={errors}
               titleRef={titleRef}
               descriptionRef={descriptionRef}

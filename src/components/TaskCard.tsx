@@ -103,20 +103,24 @@ export default function TaskCard(props: TaskCardProps) {
         </CardContent>
       </Card>
 
-      <EditTaskDialog
-        open={editOpen}
-        onClose={() => setEditOpen(false)}
-        task={props}
-      />
+      {editOpen && (
+        <EditTaskDialog
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          task={props}
+        />
+      )}
 
-      <ConfirmDeleteDialog
-        open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        onConfirm={() => {
-          onDelete(props.id);
-          setDeleteOpen(false);
-        }}
-      />
+      {deleteOpen && (
+        <ConfirmDeleteDialog
+          open={deleteOpen}
+          onClose={() => setDeleteOpen(false)}
+          onConfirm={() => {
+            onDelete(props.id);
+            setDeleteOpen(false);
+          }}
+        />
+      )}
     </>
   );
 }

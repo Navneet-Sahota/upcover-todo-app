@@ -11,9 +11,10 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useTaskStore from "../store/taskStore";
-import TaskFormBody from "./TaskFormBody";
+import TaskFormBody, { FieldData } from "./TaskFormBody";
 import useTaskForm from "../hooks/useTaskForm";
 import { motion } from "framer-motion";
+import { Control } from "react-hook-form";
 
 interface Props {
   open: boolean;
@@ -71,7 +72,7 @@ export default function TaskFormDialog({ open, onClose }: Props) {
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogContent sx={{ px: 3 }}>
             <TaskFormBody
-              control={control}
+              control={control as Control<FieldData>}
               errors={errors}
               titleRef={titleRef}
               descriptionRef={descriptionRef}
