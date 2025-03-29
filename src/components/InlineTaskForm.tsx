@@ -11,12 +11,7 @@ export default function InlineTaskForm() {
 
   return (
     <>
-      <Button
-        fullWidth
-        variant="contained"
-        onClick={() => setOpen(true)}
-        sx={{ mb: 3 }}
-      >
+      <Button variant="contained" onClick={() => setOpen(true)} sx={{ mb: 3 }}>
         Create New Todo
       </Button>
       <TaskFormDialog open={open} onClose={() => setOpen(false)} />

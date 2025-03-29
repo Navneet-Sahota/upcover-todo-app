@@ -33,10 +33,10 @@ export default function TaskCard(props: TaskCardProps) {
     <>
       <Card variant="outlined" sx={{ mb: 2 }}>
         <CardContent sx={{ px: 2, py: 1.5 }}>
-          <Stack direction="row" alignItems="center" gap={1}>
+          <Stack direction="row" alignItems="start" gap={1}>
             <span
               {...dragHandleProps}
-              style={{ display: "flex", cursor: "grab" }}
+              style={{ display: "flex", cursor: "grab", paddingTop: "10px" }}
             >
               <DragIndicatorIcon sx={{ color: "text.disabled" }} />
             </span>
