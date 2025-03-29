@@ -13,21 +13,33 @@ import { useState } from "react";
 import useTaskStore, { Task } from "../store/taskStore";
 import EditTaskDialog from "./EditTaskDialog";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
-export default function TaskCard(props: Task) {
+interface TaskCardProps extends Task {
+  dragHandleProps?: DraggableProvidedDragHandleProps | null | undefined;
+}
+
+export default function TaskCard(props: TaskCardProps) {
   const toggle = useTaskStore((s) => s.toggleComplete);
   const onDelete = useTaskStore((s) => s.deleteTask);
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const { title, description, completed } = props;
+  const { title, description, completed, dragHandleProps } = props;
 
   return (
     <>
       <Card variant="outlined" sx={{ mb: 2 }}>
         <CardContent sx={{ px: 2, py: 1.5 }}>
           <Stack direction="row" alignItems="center" gap={1}>
+            <span
+              {...dragHandleProps}
+              style={{ display: "flex", cursor: "grab" }}
+            >
+              <DragIndicatorIcon sx={{ color: "text.disabled" }} />
+            </span>
             <Stack alignSelf="start">
               <Checkbox
                 checked={completed}

@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import TaskFormBody from "./TaskFormBody";
 import useTaskStore, { Task } from "../store/taskStore";
 import useTaskForm from "../hooks/useTaskForm";
+import { motion } from "framer-motion";
 
 type Props = {
   open: boolean;
@@ -64,26 +65,33 @@ export default function EditTaskDialog({ open, onClose, task }: Props) {
         </IconButton>
       </Box>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent sx={{ px: 3 }}>
-          <TaskFormBody
-            control={control}
-            errors={errors}
-            titleRef={titleRef}
-            descriptionRef={descriptionRef}
-            duplicateError={duplicateError}
-          />
-        </DialogContent>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.25 }}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent sx={{ px: 3 }}>
+            <TaskFormBody
+              control={control}
+              errors={errors}
+              titleRef={titleRef}
+              descriptionRef={descriptionRef}
+              duplicateError={duplicateError}
+            />
+          </DialogContent>
 
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={onClose} variant="text">
-            Cancel
-          </Button>
-          <Button type="submit" variant="contained">
-            Save
-          </Button>
-        </DialogActions>
-      </form>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button onClick={onClose} variant="text">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained">
+              Save
+            </Button>
+          </DialogActions>
+        </form>
+      </motion.div>
     </Dialog>
   );
 }

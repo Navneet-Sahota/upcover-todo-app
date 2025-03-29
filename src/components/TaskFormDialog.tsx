@@ -1,4 +1,3 @@
-// TaskFormDialog.tsx
 import {
   Dialog,
   DialogTitle,
@@ -14,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import useTaskStore from "../store/taskStore";
 import TaskFormBody from "./TaskFormBody";
 import useTaskForm from "../hooks/useTaskForm";
+import { motion } from "framer-motion";
 
 interface Props {
   open: boolean;
@@ -62,26 +62,33 @@ export default function TaskFormDialog({ open, onClose }: Props) {
         </IconButton>
       </Box>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent sx={{ px: 3 }}>
-          <TaskFormBody
-            control={control}
-            errors={errors}
-            titleRef={titleRef}
-            descriptionRef={descriptionRef}
-            duplicateError={duplicateError}
-          />
-        </DialogContent>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ duration: 0.25 }}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogContent sx={{ px: 3 }}>
+            <TaskFormBody
+              control={control}
+              errors={errors}
+              titleRef={titleRef}
+              descriptionRef={descriptionRef}
+              duplicateError={duplicateError}
+            />
+          </DialogContent>
 
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={onClose} variant="text">
-            Cancel
-          </Button>
-          <Button type="submit" variant="contained">
-            Add
-          </Button>
-        </DialogActions>
-      </form>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button onClick={onClose} variant="text">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained">
+              Add
+            </Button>
+          </DialogActions>
+        </form>
+      </motion.div>
     </Dialog>
   );
 }

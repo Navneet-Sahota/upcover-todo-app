@@ -1,19 +1,25 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { nanoid } from "nanoid";
 
-type Task = {
+export type Task = {
   id: string;
   title: string;
-  description?: string;
+  description: string;
   completed: boolean;
 };
 
 type State = {
   tasks: Task[];
   addTask: (task: Omit<Task, "id">) => void;
-  updateTask: (id: string, task: Partial<Omit<Task, "id">>) => void;
+  updateTask: (id: string, updated: Partial<Task>) => void;
   deleteTask: (id: string) => void;
   toggleComplete: (id: string) => void;
+  reorderTasks: (
+    status: "complete" | "incomplete",
+    from: number,
+    to: number
+  ) => void;
 };
 
 const useTaskStore = create<State>()(
@@ -21,34 +27,40 @@ const useTaskStore = create<State>()(
     (set) => ({
       tasks: [],
       addTask: (task) =>
-        set((state) => ({
-          tasks: [
-            ...state.tasks,
-            { ...task, id: crypto.randomUUID(), completed: false },
-          ],
-        })),
+        set((s) => ({ tasks: [{ ...task, id: nanoid() }, ...s.tasks] })),
       updateTask: (id, updated) =>
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === id ? { ...task, ...updated } : task
-          ),
+        set((s) => ({
+          tasks: s.tasks.map((t) => (t.id === id ? { ...t, ...updated } : t)),
         })),
       deleteTask: (id) =>
-        set((state) => ({
-          tasks: state.tasks.filter((task) => task.id !== id),
-        })),
+        set((s) => ({ tasks: s.tasks.filter((t) => t.id !== id) })),
       toggleComplete: (id) =>
-        set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === id ? { ...task, completed: !task.completed } : task
+        set((s) => ({
+          tasks: s.tasks.map((t) =>
+            t.id === id ? { ...t, completed: !t.completed } : t
           ),
         })),
+      reorderTasks: (status, from, to) =>
+        set((s) => {
+          const tasks = [...s.tasks];
+          const filtered = tasks.filter(
+            (t) => t.completed === (status === "complete")
+          );
+          const task = filtered[from];
+          if (!task) return { tasks };
+
+          const unchanged = tasks.filter(
+            (t) => t.completed !== (status === "complete")
+          );
+          const updated = [...filtered];
+          updated.splice(from, 1);
+          updated.splice(to, 0, task);
+
+          return { tasks: [...updated, ...unchanged] };
+        }),
     }),
-    {
-      name: "todo-tasks",
-    }
+    { name: "task-storage" }
   )
 );
 
 export default useTaskStore;
-export type { Task };

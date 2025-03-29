@@ -1,8 +1,8 @@
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import AddTaskFAB from "./components/AddTaskFAB";
 import Header from "./components/Header";
-import TaskList from "./components/TaskList";
 import InlineTaskForm from "./components/InlineTaskForm";
+import DragDropList from "./components/DragDropList";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
           <Typography variant="h6" gutterBottom>
             Incomplete
           </Typography>
-          <TaskList status="incomplete" />
+          <DragDropList status="incomplete" />
         </Box>
 
         <Divider sx={{ my: 3 }} />
@@ -33,7 +33,7 @@ function App() {
           <Typography variant="h6" gutterBottom>
             Complete
           </Typography>
-          <TaskList status="complete" />
+          <DragDropList status="complete" />
         </Box>
       </Stack>
 
